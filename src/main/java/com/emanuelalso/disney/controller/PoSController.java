@@ -33,10 +33,11 @@ public class PoSController {
 	} 
 	
 	//Show details by id
-			@GetMapping("/{id}")
-			public ResponseEntity<Optional<PoS>> details(@PathVariable(value="id") Long poSId){
-				return ResponseEntity.ok(poSService.findById(poSId));
-			}
+	@GetMapping("/{id}")
+	public ResponseEntity<Optional<PoS>> details(@PathVariable(value="id") Long poSId){
+		return ResponseEntity.ok(poSService.findById(poSId));
+	}
+			
 	//Create new movie or serie			
 	@PostMapping
 	public ResponseEntity<?> create(@RequestBody PoS poS){

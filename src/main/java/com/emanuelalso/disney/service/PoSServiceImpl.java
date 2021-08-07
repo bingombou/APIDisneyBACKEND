@@ -25,6 +25,7 @@ public class PoSServiceImpl implements PoSService{
 	}
 
 	@Override
+	@Transactional
 	public PoS save(PoS poS) {
 		return poSRepository.save(poS);
 	}

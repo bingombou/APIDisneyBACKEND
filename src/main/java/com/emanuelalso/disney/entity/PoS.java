@@ -2,6 +2,7 @@ package com.emanuelalso.disney.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -15,15 +16,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
-@Table(name = "peliculaoseries")
+@Table(name = "peliculasoseries")
 public class PoS implements Serializable{		
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;	
+	private Long poSId;	
 	
 	private String imagen;
 	
@@ -31,23 +36,21 @@ public class PoS implements Serializable{
 	private String titulo;
 	
 	@Column(name = "fecha_creacion")
-	private Date fechaCreacion;
+	private Date fechaCreacion = new Date();
 	
 	private int calificacion;	
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "id_genero")
 	private Genero genero;	
 	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Personaje> personajesL = new ArrayList<>();	
-				
-	
-	public PoS(String imagen, String titulo, Date fechaCreacion, int calificacion, Genero genero) {
+	@OneToMany(mappedBy = "poS", cascade = CascadeType.ALL)
+	private Collection<PersonajePoS> personajePoSs = new ArrayList<>();
+		
+	public PoS(String imagen, String titulo, int calificacion, Genero genero) {
 		super();
 		this.imagen = imagen;
 		this.titulo = titulo;
-		this.fechaCreacion = fechaCreacion;
 		this.calificacion = calificacion;
 		this.genero = genero;
 	}
@@ -55,23 +58,19 @@ public class PoS implements Serializable{
 	public PoS() {
 		
 	}
+	
 
-	public Long getId() {
-		return id;
+	public Long getPoSId() {
+		return poSId;
 	}
 
-
-
-	public void setId(Long id) {
-		this.id = id;
+	public void setPoSId(Long poSId) {
+		this.poSId = poSId;
 	}
-
-
 
 	public String getImagen() {
 		return imagen;
 	}
-
 
 
 	public void setImagen(String imagen) {
@@ -111,22 +110,25 @@ public class PoS implements Serializable{
 	}			
 		
 	
-
+	@JsonBackReference (value = "genero")
 	public Genero getGenero() {
 		return genero;
 	}
 
 	public void setGenero(Genero genero) {
 		this.genero = genero;
+	}	
+ 
+	@JsonManagedReference(value = "pos")
+	public Collection<PersonajePoS> getPersonajePoSs() {
+		return personajePoSs;
 	}
 
-	public List<Personaje> getPersonajesL() {
-		return personajesL;
+	public void setPersonajePoSs(Collection<PersonajePoS> personajePoSs) {
+		this.personajePoSs = personajePoSs;
 	}
 
-	public void setPersonajesL(List<Personaje> personajesL) {
-		this.personajesL = personajesL;
-	}
+
 
 	private static final long serialVersionUID = 2629690442266164730L;
 	

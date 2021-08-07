@@ -2,6 +2,7 @@ package com.emanuelalso.disney.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -14,7 +15,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "personajes") 
@@ -22,7 +26,7 @@ public class Personaje implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long personajeId;
 	
 	private String imagen;
 	
@@ -36,10 +40,8 @@ public class Personaje implements Serializable{
 	@Column(length = 1200)	
 	private String historia;
 	
-
-	@ManyToMany(mappedBy = "personajesL", fetch = FetchType.LAZY, cascade = CascadeType.ALL)	
-	private List<PoS> poSL = new ArrayList<>();	
-		
+	@OneToMany(mappedBy = "personaje", cascade = CascadeType.ALL)
+	private Collection<PersonajePoS> personajePoSs = new ArrayList<>(); 
 
 	public Personaje(String imagen, String nombre, int edad, float peso, String historia) {
 		super();
@@ -52,15 +54,14 @@ public class Personaje implements Serializable{
 
 
 	public Personaje() {
-	}
-	
+	}		
 
-	public Long getId() {
-		return id;
+	public Long getPersonajeId() {
+		return personajeId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setPersonajeId(Long personajeId) {
+		this.personajeId = personajeId;
 	}
 
 	public String getImagen() {
@@ -112,24 +113,15 @@ public class Personaje implements Serializable{
 	public void setHistoria(String historia) {
 		this.historia = historia;
 	}
-	
 
-	public List<PoS> getPoSL() {
-		return poSL;
+	@JsonManagedReference(value = "personaje")
+	public Collection<PersonajePoS> getPersonajePoSs() {
+		return personajePoSs;
 	}
 
-
-	public void setPoSL(List<PoS> poSL) {
-		this.poSL = poSL;
+	public void setPersonajePoSs(Collection<PersonajePoS> personajePoSs) {
+		this.personajePoSs = personajePoSs;
 	}
-
-
-
-
-
-
-
-
 
 
 	private static final long serialVersionUID = 6646313909540413842L;
